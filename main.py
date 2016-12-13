@@ -7,7 +7,7 @@
 #########################################
 
 
-POLYSEED=3 #max number of Polys generated from the old one in one iteration.
+POLYSEED=2 #max number of Polys generated from the old one in one iteration.
 solutions=[]
 
 import copy
@@ -131,8 +131,8 @@ def drawPoly2(list):
     a.selectedpoints=[ Point(p[0],p[1]) for p in list]
     drawPoly(a)
 
-polys=[Vscpoly(223)]
-for i in range(0,3000):
+polys=[Vscpoly(29)]
+for i in range(0,30000):
     if len(polys)>0:
         poly1=polys.pop()
         if i % 100 == 0:  print "Step " + str(i) + poly1.printPoly()
