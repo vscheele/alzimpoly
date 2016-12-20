@@ -56,6 +56,13 @@ class PolyDrawer:
     def clean(self):  # cleans the PolyDrawer (removes all existing polys and text from the plot
         self.fig.clear()
         return True
+def drawNow(list):
+    pd=PolyDrawer()
+    plt.ioff()
+    pd.drawNewPoly(list)
+    plt.show()
+
+
 
 def main():
     #plt.ion()
@@ -70,6 +77,7 @@ def main():
     pd.drawNewPoly(pointlist)
     plt.ioff()
     plt.show()
+
 
 if  __name__ =='__main__':
     main()

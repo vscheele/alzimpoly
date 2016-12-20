@@ -103,6 +103,8 @@ def mutateRandom(Poly1):  #gets Vscpoly and returns valid mutations from the ori
             result.append(newPoly)
     return result
 
+
+
 #calculates the area of a Vscpoly with the help of Numpy package
 def findArea(P):
     x,y=[],[]
