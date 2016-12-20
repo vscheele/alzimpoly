@@ -60,14 +60,3 @@ def intersect3(A, B, C, D):
 
 def intersect(A, B, C, D):
     return intersection([A.x,A.y,B.x,B.y],[C.x,C.y,D.x,D.y])
-
-
-a = Point(0,0)
-b = Point(0,1)
-c = Point(1,1)
-d = Point(1,0)
-
-
-print intersect(a,b,c,d)
-print intersect(a,c,b,d)
-print intersect(a,d,b,c)

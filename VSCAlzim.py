@@ -141,8 +141,10 @@ def DistanceToCircle(n,Point1):
 def DistanceToPointFast(Point1,Point2):
     return (Point1.x-Point2.x)**2+(Point1.y-Point2.y)**2
 
+
+
 def main():
-    n=37
+    n=9
     polys = [Vscpoly(n)]
     polys.append(Vscpoly(n))
     polys.append(Vscpoly(n))
