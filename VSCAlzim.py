@@ -7,7 +7,7 @@
 #########################################
 
 
-POLYSEED=2 #max number of Polys generated from the old one in one iteration.
+POLYSEED=5 #max number of Polys generated from the old one in one iteration.
 solutions=[]
 
 import copy
@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
 from VSCPoint import Point, intersect
+import VSCPolyDrawer as pd
 
 def PolyArea(x,y):
     return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
@@ -144,7 +145,7 @@ def DistanceToPointFast(Point1,Point2):
 
 
 def main():
-    n=9
+    n=21
     polys = [Vscpoly(n)]
     polys.append(Vscpoly(n))
     polys.append(Vscpoly(n))
@@ -154,12 +155,19 @@ def main():
     polys.append(Vscpoly(n))
     polys.append(Vscpoly(n))
     polys.append(Vscpoly(n))
-    for i in range(0, 2000000):
+    podraw=pd.PolyDrawer()
+    for i in range(0, 20000):
         if len(polys) > 0:
             #polys.sort(key=lambda x: len(x.selectedpoints)*1000+x.length, reverse=True)
             #polys.sort(key=lambda x: DistanceToCircle(n,x.selectedpoints[-1]), reverse=True)
             poly1 = polys.pop()
-            if i % 1000 == 0:  print "Step " + str(i) + poly1.printPoly()
+            if i % 1000 == 0:
+                print "Step " + str(i) + poly1.printPoly()
+                #if solutions:
+                    #solutions.sort(key=lambda x: findArea(x), reverse=True)
+                    #podraw.drawNewPoly(solutions[0].selectedpoints)
+                podraw.drawNewPoly(poly1.getPointlist())
+
             # print "ITERATION "+str(i)+" with size of "+str(len(polys))
             # print poly1.printPoly()
             if len(poly1.selectedpoints) == poly1.size:

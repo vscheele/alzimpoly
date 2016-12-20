@@ -26,28 +26,32 @@ class PolyDrawer:
     fig=0
     def __init__(self): #initializes basic values. Open if it already calls createWindow
         self.started=True
+        self.createWindow()
     def createWindow(self):
         plt.ion()
         self.fig = plt.figure()
+        plt.grid()
+        plt.pause(.1)
         return True
     def drawNewPoly(self,listOfPoints,xmax=-1,ymax=-1):  # draws a Poly in the Window
         self.fig.clear()
-        if listOfPoints:
+        if len(listOfPoints)>1:
             verts = listOfPoints
-            verts.append(verts[0])  # add first point as last (close the polygon)
+            verts.append((verts[0])) # add first point as last (close the polygon)
             codes = [1]
             codes[0] = Path.MOVETO # move to the point where we start drawing
             for v in range(0, len(verts) - 2): # draw the lines
                 codes.append(Path.LINETO)
             codes.append(Path.CLOSEPOLY)
+            #print verts,codes
             path = Path(verts, codes)
+
             ax = self.fig.add_subplot(111)
             patch = patches.PathPatch(path, facecolor='orange', lw=2)
             ax.add_patch(patch)
             ax.set_xlim(0, max([x[0] for x in verts]) )  # x
             ax.set_ylim(0, max([x[1] for x in verts]) )  # y
-        plt.grid()
-        plt.pause(.1)
+        plt.pause(.01)
 
     def clean(self):  # cleans the PolyDrawer (removes all existing polys and text from the plot
         self.fig.clear()
@@ -58,11 +62,11 @@ def main():
     #plt.plot([1.6, 2.7])
 
     pd=PolyDrawer()
-    pd.createWindow()
+    #pd.createWindow()
     pd.drawNewPoly([])
     pointlist=[(1,1),(2,2),(4,1),(4,0.5)]
     pd.drawNewPoly(pointlist)
-    pointlist=[(1,0),(2,2),(4,1),(3,0.5)]
+    pointlist=[(7, 0), (1, 4), (2, 5), (8, 7), (4, 6)]
     pd.drawNewPoly(pointlist)
     plt.ioff()
     plt.show()
