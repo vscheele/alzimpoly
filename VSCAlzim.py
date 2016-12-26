@@ -16,15 +16,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from VSCPoint import Point, intersect
+from VSCPoint import Point, intersect, intersectTuple
 import VSCPolyDrawer as pd
 
 def PolyArea(x,y):
     return 0.5*np.abs(np.dot(x,np.roll(y,1))-np.dot(y,np.roll(x,1)))
 
 # this method assumes that A.y differs from B.y
-def getslope(A,B):
+def getslopePoint(A, B):
     return (float(A.y) - float(B.y)) / (float(A.x) - float(B.x))
+def getslopeTouple(A,B):
+    if B[0]==A[0]:return 9999999
+    return (float(A[1]) - float(B[1])) / (float(A[0]) - float(B[0]))
 
 class Vscpoly:
     size=5 # default size
@@ -64,11 +67,18 @@ def scorePoly(P):
 def tra(list):
     return [Point(p[0]+1, p[1] + 1) for p in list]
 
-def doesintersect(P1,P2,L): # Point, ListToCheck
+def doesintersectPoint(P1, P2, L): # Point, ListToCheck
     for i in range(0,len(L)-2):
-        test=intersect(P1,P2,L[i],L[i+1])
+        # test=intersect(P1,P2,L[i],L[i+1])
        # print test,P1,P2,L[i],L[i+1]
         if intersect(P1,P2,L[i],L[i+1]) :
+            return True
+    return False
+def doesintersectTuple(P1,P2,L): # Point, ListToCheck
+    for i in range(0,len(L)-2):
+        # test=intersect(P1,P2,L[i],L[i+1])
+       # print test,P1,P2,L[i],L[i+1]
+        if intersectTuple(P1,P2,L[i],L[i+1]) :
             return True
     return False
 
@@ -88,10 +98,10 @@ def mutateRandom(Poly1):  #gets Vscpoly and returns valid mutations from the ori
         # newpoint=[(0, 0), (6, 1), (4, 2), (5, 3), (2, 6), (1, 4), (3, 5)][len(Poly1.selectedpoints)]
         newx=newpoint[0]
         newy=newpoint[1]
-        newslope=getslope(Poly1.selectedpoints[-1], Point(newx, newy))
+        newslope=getslopePoint(Poly1.selectedpoints[-1], Point(newx, newy))
         # if newx==4 and newy==4:
         #    print "krit"
-        if newslope not in Poly1.slopesused and not doesintersect(Poly1.selectedpoints[-1], Point(newx, newy), Poly1.selectedpoints): #new Slope not used and no intersection
+        if newslope not in Poly1.slopesused and not doesintersectPoint(Poly1.selectedpoints[-1], Point(newx, newy), Poly1.selectedpoints): #new Slope not used and no intersection
             #lets create the new polygon!!
             newPoly=Poly1.getCopy()
             newPoly.selectedpoints.append(Point(newx, newy))
@@ -111,6 +121,14 @@ def findArea(P):
     for p in P.selectedpoints:
         x.append(p.x)
         y.append(p.y)
+    return PolyArea(x,y)
+
+#calculates the area of a Vscpoly with the help of Numpy package
+def findAreaTouple(P):
+    x,y=[],[]
+    for p in P:
+        x.append(p[0])
+        y.append(p[1])
     return PolyArea(x,y)
 
 def drawPoly(Poly1):
@@ -137,12 +155,14 @@ def drawPoly2(list):
     a.selectedpoints=[ Point(p[0],p[1]) for p in list]
     drawPoly(a)
 
-def DistanceToMid(n,Point1):
+def distanceToMid(n, Point1):
     return np.sqrt(abs(Point1.x-float(n/2.0))+abs(Point1.y-float(n/2.0)))
-def DistanceToCircle(n,Point1):
-    return abs(float(n/2.0)-DistanceToMid(n,Point1))
-def DistanceToPointFast(Point1,Point2):
+def distanceToCircle(n, Point1):
+    return abs(float(n/2.0) - distanceToMid(n, Point1))
+def distanceToPointFast(Point1, Point2):
     return (Point1.x-Point2.x)**2+(Point1.y-Point2.y)**2
+def distanceToToupleFast(Point1,Point2):
+    return (Point1[0]-Point2[0])**2+(Point1[1]-Point2[1])**2
 
 
 
@@ -174,8 +194,8 @@ def main():
             # print poly1.printPoly()
             if len(poly1.selectedpoints) == poly1.size:
                 # closing the polygon may be a problem
-                lastslope = getslope(poly1.selectedpoints[-1], poly1.selectedpoints[0])
-                if lastslope not in poly1.slopesused and not doesintersect(poly1.selectedpoints[-1], poly1.selectedpoints[0],
+                lastslope = getslopePoint(poly1.selectedpoints[-1], poly1.selectedpoints[0])
+                if lastslope not in poly1.slopesused and not doesintersectPoint(poly1.selectedpoints[-1], poly1.selectedpoints[0],
                                                                            poly1.selectedpoints[1:]):
                     solutions.append(poly1)
             else:

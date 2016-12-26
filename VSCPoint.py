@@ -60,3 +60,5 @@ def intersect3(A, B, C, D):
 
 def intersect(A, B, C, D):
     return intersection([A.x,A.y,B.x,B.y],[C.x,C.y,D.x,D.y])
+def intersectTuple(A, B, C, D):
+    return intersection([A[0],A[1],B[0],B[1]],[C[0],C[1],D[0],D[1]])
